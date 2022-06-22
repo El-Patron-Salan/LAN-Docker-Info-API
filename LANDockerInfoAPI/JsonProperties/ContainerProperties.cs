@@ -1,6 +1,6 @@
 ﻿namespace LANDockerInfoAPI.JsonProperties
 {
-    internal class ContainerProperties
+    public class ContainerProperties
     {
         public string? ID { get; set; }
         public string? Image { get; set; }

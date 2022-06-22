@@ -1,23 +1,19 @@
-﻿using System.Xml;
-using System.Xml.Serialization;
+﻿using Newtonsoft.Json;
 
 namespace LANDockerInfoAPI.Controllers
 {
     internal class SerializationController<T>
     {
-        private readonly XmlSerializer xmlSerializer = new(typeof(T));
-
-        internal void Serialize<T>(T obj, string path)
+        ///Serialization is obsolete for now - it's a readonly API
+        internal static List<T> Deserialize(string path)
         {
-            StreamWriter streamWriter = new(path);
-            xmlSerializer.Serialize(streamWriter, obj);
-            streamWriter.Close();
-        }
-
-        internal void Deserialize<T>(T obj, string path)
-        {
-            using XmlReader read = XmlReader.Create(path);
-            obj = (T?)xmlSerializer.Deserialize(read) ?? throw new InvalidOperationException("SerializationController.sc: invalid operation exception line 20");
+            String json;
+            using (StreamReader streamReader = new(@$"S:\{path}", encoding: System.Text.Encoding.UTF8))
+            {
+                json = streamReader.ReadToEnd();
+            }
+            List<T> obj = JsonConvert.DeserializeObject<List<T>>(json) ?? throw new Exception("SerializationController.sc: deserialization failed line 20");
+            return obj;
         }
     }
 }
