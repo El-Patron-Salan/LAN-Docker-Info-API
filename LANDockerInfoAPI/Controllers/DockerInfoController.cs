@@ -23,8 +23,14 @@ namespace LANDockerInfoAPI.Controllers
         [HttpGet("ContainersInformation/{image}")]
         public ContainerProperties GetContainerByImage([FromRoute] string image)
         {
-            var deserialized = SerializationController<List<ContainerProperties>>.Deserialize("ContainersInformation.json");
-            return deserialized.FirstOrDefault(_ => _.Image == image) ?? throw new Exception("Container not found");
+            try
+            {
+                var deserialized = SerializationController<List<ContainerProperties>>.Deserialize("ContainersInformation.json");
+                return deserialized.FirstOrDefault(_ => _.Image == image);
+            }catch(Exception ex)
+            {
+                return null;
+            }
         }
 
 
@@ -37,8 +43,14 @@ namespace LANDockerInfoAPI.Controllers
         [HttpGet("ImagesInformation/{repo}")]
         public ImageProperties GetImageByRepo([FromRoute] string repo)
         {
-            var deserialized = SerializationController<List<ImageProperties>>.Deserialize("ImagesInformation.json");
-            return deserialized.FirstOrDefault(_ => _.Repository == repo) ?? throw new Exception("Image not found");
-        }
+            try
+            {
+                var deserialized = SerializationController<List<ImageProperties>>.Deserialize("ImagesInformation.json");
+                return deserialized.FirstOrDefault(_ => _.Repository == repo);
+            }catch(Exception ex)
+            {
+                return null;
+            }
+}
     }
 }
